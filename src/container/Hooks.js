@@ -42,12 +42,12 @@ export const LoanHooks = () => {
         try {
             setLoading(true);
             const response = await axios.get(
-                `https://v6.exchangerate-api.com/v6/49857832993a5fd3cc76f057/latest/${currency}`
+                `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_API_KEY}/latest/${currency}`
             );
 
             setExchangeRates(response?.data?.conversion_rates);
         } catch (err) {
-            setError(err.message);
+            setError(err?.message);
         } finally {
             setLoading(false);
         }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Typography } from '@mui/material';
 import LoanForm from './LoanForm';
 import AmortizationTableWithCurrency from './AmortizationTableWithCurrency';
@@ -7,11 +7,13 @@ import { useCurrency } from '../context/CurrencyContext';
 
 const HomePage = () => {
   const { currency, setCurrency } = useCurrency()
-  const { emi, schedule, calculateEMI, setSchedule } = LoanHooks();
+  const { emi, schedule, calculateEMI, setSchedule, exchangeRates, getExchangeRatesApiCall } = LoanHooks();
 
-  const handleScheduleUpdate = (newSchedule) => {
-    setSchedule([...newSchedule]);
-  };
+  useEffect(() => {
+    getExchangeRatesApiCall(currency)
+  }, [])
+
+  const currentRate = exchangeRates[currency] || 1
 
   const resetSchedule = () => setSchedule([]);
 
@@ -20,8 +22,8 @@ const HomePage = () => {
       <Typography variant="h4" align="start" sx={{ px: { xs: 2, sm: 3 }, mt: { xs: 3, sm: 4 } }}>
         Loan Calculator Dashboard
       </Typography>
-      <LoanForm onScheduleUpdate={handleScheduleUpdate} calculateEMI={calculateEMI} />
-      <AmortizationTableWithCurrency currency={currency} onCurrencyChange={(e) => setCurrency(e.target.value)} emi={emi} schedule={schedule} onReset={resetSchedule} />
+      <LoanForm calculateEMI={calculateEMI} />
+      <AmortizationTableWithCurrency currency={currency} onCurrencyChange={(e) => setCurrency(e.target.value)} emi={emi} schedule={schedule} onReset={resetSchedule} rate={currentRate}/>
     </Container>
   );
 };

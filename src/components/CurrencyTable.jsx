@@ -19,7 +19,7 @@ const CurrencyTable = () => {
 
   useEffect(() => {
     getExchangeRatesApiCall(currency);
-  }, [currency]);
+  }, []);
 
 
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { MenuItem, Select, FormControl, InputLabel, Container, Box, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from '@mui/material';
 
-const AmortizationTableWithCurrency = ({ currency, onCurrencyChange, emi, schedule, onReset }) => {
+const AmortizationTableWithCurrency = ({ currency, onCurrencyChange, emi, schedule, onReset, rate }) => {
+
+  const formattedEMI = emi * rate
 
   const currencyArr = [
     { name: "INR", value: "INR" },
@@ -15,7 +17,7 @@ const AmortizationTableWithCurrency = ({ currency, onCurrencyChange, emi, schedu
     <Container sx={{ mt: 3 }}>
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">
-          Monthly EMI: {currency} {emi.toFixed(2)}
+          Monthly EMI: {formattedEMI.toFixed(2)} {currency}
         </Typography>
       </Box>
 
@@ -23,7 +25,7 @@ const AmortizationTableWithCurrency = ({ currency, onCurrencyChange, emi, schedu
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <InputLabel>Currency</InputLabel>
-            <Select value={currency} label="Currency" onChange={onCurrencyChange}>
+            <Select value={currency} label="Currency" onChange={(e) => onCurrencyChange(e)}>
               {currencyArr.map((item, idx) => (
                 <MenuItem key={idx} value={item.value}>{item.name}</MenuItem>
               ))}
@@ -59,9 +61,9 @@ const AmortizationTableWithCurrency = ({ currency, onCurrencyChange, emi, schedu
             {schedule.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{row.month}</TableCell>
-                <TableCell>{row.principal.toFixed(2)} {currency}</TableCell>
-                <TableCell>{row.interest.toFixed(2)} {currency}</TableCell>
-                <TableCell>{row.balance.toFixed(2)} {currency}</TableCell>
+              <TableCell>{(row.principal * rate).toFixed(2)}</TableCell>
+              <TableCell>{(row.interest * rate).toFixed(2)}</TableCell>
+              <TableCell>{(row.balance * rate).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Box, Grid } from '@mui/material';
 
-const LoanForm = (props) => {
+const LoanForm = ({ calculateEMI }) => {
   const [inputs, setInputs] = useState({ principal: '', rate: '', duration: '' });
   const [errors, setErrors] = useState({});
 
@@ -24,7 +24,7 @@ const LoanForm = (props) => {
 
   const handleSubmit = () => {
     if (validate()) {
-      props.calculateEMI(Number(inputs.principal), Number(inputs.rate), Number(inputs.duration));
+      calculateEMI(Number(inputs.principal), Number(inputs.rate), Number(inputs.duration));
     }
   };
 
